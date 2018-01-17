@@ -1,9 +1,4 @@
-#Intro:
-Hi before anything thanks for taking the time
 
-in reviewing my application, sorry for the 
-
-inconvenience it might have caused.
 
 #To run the application if you are using Linux or OSX:
 
@@ -29,12 +24,16 @@ inconvenience it might have caused.
     
 
 #Install Environment
+
     mkdir myproject
+    
     cd myproject
+    
     virtualenv venv
 
 
 #Install Flask
+
     sudo pip install Flask
 
 

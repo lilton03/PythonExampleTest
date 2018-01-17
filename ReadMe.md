@@ -24,12 +24,16 @@
     
 
 #Install Environment
+
     mkdir myproject
+    
     cd myproject
+    
     virtualenv venv
 
 
 #Install Flask
+
     sudo pip install Flask
 
 

@@ -1,0 +1,22 @@
+#Install python:
+sudo apt-get update
+sudo apt-get -y upgrade
+sudo apt-get install -y python3-pip
+#Install virtualenv
+sudo pip install virtualenv
+sudo apt-get install python-virtualenv
+
+#Install Environment
+mkdir myproject
+cd myproject
+virtualenv venv
+. venv/bin/activate
+
+#Install Flask
+sudo pip install Flask
+
+
+#Run Applicaiton
+FLASK_APP=server\MainRoute.py
+FLASK_DEBUG=1
+run flask

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type=text/javascript>$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
+    <script type=text/javascript src="{{url_for('static', filename='JSPlugins/jquery-3.2.1.min.js') }}"></script>
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="tree" style="width:auto;height:800px;overflow-y:scroll">
+    <div style="width: 276px;display: block;margin: auto">
+        <img src="{{url_for('static', filename='CSS/images/loading2.gif') }}" width="500px">
+    </div>"
+</div>
+<span>Name</span> <input id='search_html_data' type="text"  value=""> <span>Size</span> <input id="search_html_data_size" type="number"> <button onclick="search_tree_node()">Search</button>
+<button onclick="get_tree_data()">Reset Search</button><button onclick="reset_everything()">RESET PROGRAM</button>
+</body>
+</html>
+
+<script type="text/javascript">
+
+  /*Get Whole Tree*/
+  function get_tree_data() {
+       $('#tree').html(play_loader());
+       $('#search_html_data').val('');
+       $('#search_html_data_size').val('');
+        $.getJSON($SCRIPT_ROOT+'/_get_page_data',{},
+        function (data) {
+        if(data['status']===200) {
+            console.log(data['response']);
+            $('#tree').html('<ul>'+parse_tree_data(data['response'],0,[])+'</ul>');
+        }
+    })
+  }
+
+  /*Get searched node*/
+  function search_tree_node() {
+       $('#tree').html(play_loader());
+      var node_name=document.getElementById('search_html_data').value;
+      var node_size=parseInt(document.getElementById('search_html_data_size').value);
+      $.getJSON($SCRIPT_ROOT+'/_get_node_data',{
+          'node_name':node_name,
+          'node_size':node_size
+          },
+        function (data) {
+        if(data['status']===200) {
+            console.log(data);
+            $('#tree').html('<ul>'+parse_tree_data(data['response'],0,[node_name,node_size])+'</ul>');
+        }
+        else{
+            alert('No Tree Found');
+            get_tree_data();
+        }
+    })
+  }
+    /*Reset program to process 0*/
+  function reset_everything() {
+       $('#tree').html(play_loader());
+       $.getJSON($SCRIPT_ROOT+'/_reset_everything',{},
+        function (data) {
+        if(data['status']===200) {
+            console.log(data['response']);
+            $('#tree').html('<ul>'+parse_tree_data(data['response'],0,[])+'</ul>');
+        }
+    })
+  }
+  /*Recursive function to Display tree data*/
+  function parse_tree_data(tree_node,node_id,searched_substr) {
+      var tree_data='<li id ='+'node-'+(node_id)+'>';
+      if(tree_node['children'].length) {
+          var image_source="{{url_for('static', filename='CSS/images/icon-down.png') }}";
+          tree_data += '<img onclick="hide_subtree('+ "'"+ node_id+"'"+')" src='+image_source+'>';
+      }
+      var text=tree_node['name'];
+      var size=tree_node['size'];
+      if(searched_substr.length && ((searched_substr[0] && tree_node['name'].toUpperCase().indexOf(searched_substr[0].toUpperCase())!==-1) || !searched_substr[0]) && ((parseInt(searched_substr[1])!=='NaN' && tree_node['size']===searched_substr[1]) || !searched_substr[1])) {
+          var indx=tree_node['name'].toUpperCase().indexOf(searched_substr[0].toUpperCase());
+          var first_half=tree_node['name'].substring(0,indx);
+          var second_half=tree_node['name'].substring(indx+searched_substr[0].length,tree_node['name'].length);
+          text=first_half+'<span style="background-color:yellow;">'+searched_substr[0]+'</span>'+second_half;
+          if(parseInt(searched_substr[1])!=='NaN' && tree_node['size']===searched_substr[1])
+          size='<span style="background-color:yellow;">'+size+'</span>';
+      }
+      text+=' '+size;
+      tree_data+=text;
+      if(tree_node['children'].length){
+          var temp='<ul>';
+          for(var x =0; x<tree_node['children'].length;x++)
+              temp+=parse_tree_data(tree_node['children'][x],node_id+''+x,searched_substr);
+          temp+='</ul>';
+          tree_data+=temp;
+      }
+      tree_data+='</li>';
+      return tree_data;
+  }
+
+
+  function hide_subtree(id) {
+      var node = document.getElementById('node-'+id);
+      var image=node.getElementsByTagName('img')[0];
+      node=node.getElementsByTagName('li');
+      var style='';
+      var image_source="{{url_for('static', filename='CSS/images/icon-down.png') }}";
+      if(node[0].style.display==='') {
+          style = 'none';
+          image_source="{{url_for('static', filename='CSS/images/icon-right.png') }}";
+      }
+      image.src=image_source;
+      for(var i=0;i<node.length;i++)
+          node[i].style.display=style;
+  }
+
+  /*Play loading Screen*/
+  function play_loader() {
+      return "<div style=\"width: 276px;display: block;margin: auto\">\n" +
+          "    <img src=\"{{url_for('static', filename='CSS/images/loading2.gif') }}\" width=\"500px\"/>\n" +
+          "    </div>";
+  }
+
+
+get_tree_data();
+
+
+
+
+
+
+</script>

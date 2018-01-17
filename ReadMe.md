@@ -1,11 +1,11 @@
 
 
-###To run the application if you are using Linux or OSX:
+#To run the application if you are using Linux or OSX:
 
     Open the Linux Command Line 
     And Input the following commands
     
-###Install python:
+#Install python:
 
     sudo apt-get update
 
@@ -14,7 +14,7 @@
     sudo apt-get install -y python3-pip
 
 
-###Install virtualenv
+#Install virtualenv
 
     sudo pip install virtualenv
     
@@ -23,19 +23,19 @@
     sudo apt-get install python-virtualenv
     
 
-###Install Environment
+#Install Environment
     mkdir myproject
     cd myproject
     virtualenv venv
 
 
-###Install Flask
+#Install Flask
     sudo pip install Flask
 
 
 
 
-###Run Application
+#Run Application
     
     Head towards the Project Directory HomeTestCoding, if you 
     are not already in it, where you extracted it:
@@ -52,7 +52,7 @@
     
     then open a browser and head towards http://127.0.0.1:5000/
 
-###If you are using windows:
+#If you are using windows:
 
     Download python right here:https://www.python.org/ftp/python/3.6.3/python-3.6.3.exe    
     
@@ -60,7 +60,7 @@
     
        
     
-###pip and setuptools on Windows
+#pip and setuptools on Windows
     
     If you don't have pip install please run: get-pip.py
     it is located inside the HomeTestCoding  
